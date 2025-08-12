@@ -3,6 +3,7 @@ package com.banco.banca.web.controller;
 import com.banco.banca.domain.entity.Client;
 import com.banco.banca.domain.service.ClientService;
 
+import com.banco.banca.domain.service.Interface.IClientService;
 import com.banco.banca.web.dto.ApiResponseDto;
 import com.banco.banca.web.dto.ClientRequestDto;
 import com.banco.banca.web.dto.ClientResponseDto;
@@ -27,7 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Clientes", description = "Gestión de clientes")
 public class ClientController {
 
-    private final ClientService clientService;
+    private final IClientService clientService;
 
     @GetMapping
     @Operation(summary = "Listar clientes", description = "Filtra por tipo/número de identificación, nombre, apellido y correo electrónico")

@@ -1,6 +1,7 @@
 package com.banco.banca.web.controller;
 
 
+import com.banco.banca.domain.service.Interface.ITransactionService;
 import com.banco.banca.domain.service.TransactionService;
 import com.banco.banca.web.dto.ConsignmentRequestDto;
 import com.banco.banca.web.dto.TransactionResponseDto;
@@ -30,7 +31,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Transacciones", description = "Operaciones de consignación, retiro y transferencia")
 public class TransactionController {
 
-    private final TransactionService transactionService;
+    private final ITransactionService transactionService;
 
     private String currentUser(String header) {
         return header != null && !header.isBlank() ? header : "system";

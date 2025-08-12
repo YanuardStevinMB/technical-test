@@ -4,6 +4,7 @@ import com.banco.banca.domain.entity.Account;
 import com.banco.banca.domain.entity.AccountStatus;
 import com.banco.banca.domain.entity.AccountType;
 import com.banco.banca.domain.service.AccountService;
+import com.banco.banca.domain.service.Interface.IAccountService;
 import com.banco.banca.web.dto.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -26,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Cuentas", description = "Gestión de cuentas bancarias")
 public class AccountController {
 
-    private final AccountService accountService;
+    private final IAccountService accountService;
 
     @PostMapping
     @Operation(summary = "Crear cuenta")

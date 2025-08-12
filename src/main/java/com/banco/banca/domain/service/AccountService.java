@@ -6,6 +6,7 @@ import com.banco.banca.domain.entity.*;
 import com.banco.banca.domain.repository.AccountRepository;
 import com.banco.banca.domain.repository.ClientRepository;
 import com.banco.banca.domain.repository.MovementRepository;
+import com.banco.banca.domain.service.Interface.IAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
-public class AccountService {
+public class AccountService implements IAccountService {
 
     private final AccountRepository accountRepository;
     private final ClientRepository clientRepository;
