@@ -110,7 +110,7 @@ public class AccountService {
 
     private String generateUniqueAccountNumber(AccountType type) {
         // Savings start with 53; Checking with 33
-        String prefix = (type == AccountType.CORRIENTE) ? "53" : "33";
+        String prefix = (type == AccountType.CORRIENTE) ? "33" : "53";
         String accountNumber;
         int attempts = 0;
         final int MAX_ATTEMPTS = 100;

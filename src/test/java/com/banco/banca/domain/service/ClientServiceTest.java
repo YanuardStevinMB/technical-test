@@ -60,7 +60,9 @@ class ClientServiceTest {
     @Test
     void createClient_Underage_ShouldThrowException() {
         // Arrange
-        validClient.setBirthDate(LocalDate.now().minusYears(19));
+
+        validClient.setBirthDate(LocalDate.now().minusYears(17));
+
 
         // Act & Assert
         BusinessException exception = assertThrows(BusinessException.class,
