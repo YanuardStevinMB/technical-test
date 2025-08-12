@@ -61,7 +61,7 @@ public class ClientController {
             @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
-    public ResponseEntity<ApiResponseDto<ClientResponseDto>> get(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponseDto<ClientResponseDto>> get(@PathVariable(name = "id") UUID id) {
         try {
             Client client = clientService.get(id);
             ApiResponseDto<ClientResponseDto> response = new ApiResponseDto<>(
@@ -131,7 +131,7 @@ public class ClientController {
             @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
-    public ResponseEntity<ApiResponseDto<ClientResponseDto>> update(@PathVariable UUID id, @Valid @RequestBody ClientRequestDto req) {
+    public ResponseEntity<ApiResponseDto<ClientResponseDto>> update(@PathVariable(name = "id") UUID id, @Valid @RequestBody ClientRequestDto req) {
         try {
             Client client = Client.builder()
                     .identificationType(req.getIdentificationType())
@@ -176,7 +176,7 @@ public class ClientController {
             @ApiResponse(responseCode = "204", description = "Cliente eliminado"),
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
-    public ResponseEntity<ApiResponseDto<Void>> delete(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponseDto<Void>> delete(@PathVariable(name = "id") UUID id) {
         try {
             clientService.delete(id);
             return ResponseEntity.noContent().build();
