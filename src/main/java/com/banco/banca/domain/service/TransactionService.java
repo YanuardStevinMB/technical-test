@@ -6,6 +6,7 @@ import com.banco.banca.domain.entity.*;
 import com.banco.banca.domain.repository.AccountRepository;
 import com.banco.banca.domain.repository.MovementRepository;
 import com.banco.banca.domain.repository.TransactionRepository;
+import com.banco.banca.domain.service.Interface.ITransactionService;
 import com.banco.banca.web.dto.TransactionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TransactionService {
+public class TransactionService implements ITransactionService {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
