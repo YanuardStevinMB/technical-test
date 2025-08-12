@@ -58,24 +58,24 @@ start http://localhost:8000/swagger-ui/index.html
 ##  Endpoints
 
 ### Clientes
-- `POST /api/clientes` - Crear cliente
-- `GET /api/clientes` - Listar clientes
-- `GET /api/clientes/{id}` - Ver cliente
-- `PUT /api/clientes/{id}` - Actualizar cliente
-- `DELETE /api/clientes/{id}` - Eliminar cliente
+- `POST /api/clients` - Crear cliente
+- `GET /api/clients` - Listar clientes
+- `GET /api/clients/{id}` - Ver cliente
+- `PUT /api/clients/{id}` - Actualizar cliente
+- `DELETE /api/clients/{id}` - Eliminar cliente
 
 ### Cuentas
-- `POST /api/cuentas` - Crear cuenta
-- `POST /api/cuentas/con-saldo` - Crear cuenta con saldo inicial
-- `GET /api/cuentas` - Listar cuentas
-- `GET /api/cuentas/{id}` - Ver cuenta
-- `PUT /api/cuentas/{id}` - Cambiar estado (ACTIVA/INACTIVA/CANCELADA)
+- `POST /api/account` - Crear cuenta
+- `POST /api/account/with-balance` - Crear cuenta con saldo inicial
+- `GET /api/account` - Listar cuentas
+- `GET /api/account/{id}` - Ver cuenta
+- `PUT /api/account/{id}` - Cambiar estado (ACTIVA/INACTIVA/CANCELADA)
 
 ### Transacciones
-- `POST /api/transacciones/consignacion` - Depositar dinero
-- `POST /api/transacciones/retiro` - Retirar dinero
-- `POST /api/transacciones/transferencia` - Transferir entre cuentas
-- `GET /api/transacciones` - Ver historial (filtros: cuenta, fechaDesde, fechaHasta)
+- `POST /api/transactions/withdraw` - Depositar dinero
+- `POST /api/transactions/transfer` - Retirar dinero
+- `POST /api/transactions/deposit` - Transferir entre cuentas
+- `GET /api/transactions` - Ver historial (filtros: cuenta, fechaDesde, fechaHasta)
 
 ---
 
