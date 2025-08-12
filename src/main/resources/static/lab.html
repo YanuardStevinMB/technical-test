@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Banco - Tester de Validaciones</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body { padding-bottom: 40px; }
+    textarea, pre.code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    pre.code { white-space: pre-wrap; }
+    .small-label { font-size: .85rem; color: #666; }
+    .card .card-header { font-weight: 600; }
+    .step-badge { font-weight: 600; }
+    .placeholder-note { font-size: .85rem; color: #6c757d; }
+    .sticky-top-md { position: sticky; top: 1rem; z-index: 2; }
+    .tab-pane .btn { text-align: left; }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <div class="d-flex align-items-center mb-3">
+      <h1 class="h3 mb-0">Tester de API - Sistema Bancario</h1>
+      <span class="ms-3 badge text-bg-primary step-badge">Simple • Claro • Estructurado</span>
+    </div>
+
+    <div class="row g-4">
+      <!-- Col izquierda: Constructor + Plantillas -->
+      <div class="col-lg-6">
+        <!-- Paso 1: Constructor de solicitud -->
+    <div class="card shadow-sm mb-4">
+          <div class="card-header">Paso 1 · Construir solicitud</div>
+      <div class="card-body">
+        <div class="row g-3 align-items-end">
+              <div class="col-md-6">
+            <label class="form-label">Base URL</label>
+                <input id="baseUrl" class="form-control" value="http://localhost:8000" />
+                <div class="small-label">Puerto por defecto: 8000</div>
+          </div>
+              <div class="col-md-3">
+            <label class="form-label">Método</label>
+            <select id="method" class="form-select">
+              <option>GET</option>
+              <option selected>POST</option>
+              <option>PUT</option>
+              <option>DELETE</option>
+            </select>
+          </div>
+              <div class="col-md-3">
+                <label class="form-label">Header X-User</label>
+                <input id="xUser" class="form-control" placeholder="opcional" />
+                <div class="small-label">Para transacciones</div>
+              </div>
+              <div class="col-12">
+            <label class="form-label">Ruta</label>
+            <input id="path" class="form-control" placeholder="/api/clientes" value="/api/clientes" />
+          </div>
+        </div>
+
+            <div id="bodySection" class="mt-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="form-label mb-0">Cuerpo (JSON)</label>
+                <span class="small-label">Visible para POST/PUT</span>
+              </div>
+              <textarea id="body" class="form-control mt-1" rows="8" placeholder="{}"></textarea>
+        </div>
+
+            <div class="mt-3 d-flex flex-wrap gap-2">
+              <button id="sendBtn" class="btn btn-primary">Enviar</button>
+          <button id="prettyBtn" class="btn btn-outline-secondary">Formatear JSON</button>
+          <button id="clearBtn" class="btn btn-outline-danger">Limpiar</button>
+              <button id="curlBtn" class="btn btn-outline-dark">Copiar cURL</button>
+        </div>
+            <div class="placeholder-note mt-2">Consejo: reemplaza los placeholders como <code>REEMPLAZA_CON_UUID_CLIENTE</code> antes de enviar.</div>
+      </div>
+    </div>
+
+        <!-- Paso 2: Plantillas rápidas con tabs -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header">Paso 2 · Plantillas rápidas</div>
+          <div class="card-body">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-clientes-tab" data-bs-toggle="pill" data-bs-target="#pills-clientes" type="button" role="tab">Clientes</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-cuentas-tab" data-bs-toggle="pill" data-bs-target="#pills-cuentas" type="button" role="tab">Cuentas</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-trans-tab" data-bs-toggle="pill" data-bs-target="#pills-trans" type="button" role="tab">Transacciones</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-consultas-tab" data-bs-toggle="pill" data-bs-target="#pills-consultas" type="button" role="tab">Consultas</button>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <!-- Clientes -->
+              <div class="tab-pane fade show active" id="pills-clientes" role="tabpanel">
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-success" data-demo="CLIENTE_VALIDO">POST crear (válido)</button>
+                  <button class="btn btn-outline-danger" data-demo="CLIENTE_MENOR_EDAD">POST crear (menor de edad)</button>
+                  <button class="btn btn-outline-danger" data-demo="CLIENTE_EMAIL_INVALIDO">POST crear (email inválido)</button>
+                  <button class="btn btn-outline-danger" data-demo="CLIENTE_NOMBRES_CORTOS">POST crear (nombres cortos)</button>
+                  <button class="btn btn-outline-danger" data-demo="CLIENTE_IDENTIFICACION_DUPLICADA">POST crear (identificación duplicada)</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CLIENTES">GET listar</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CLIENTES_FILTRO">GET con filtros</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CLIENTE_DETALLE">GET detalle por id</button>
+                  <button class="btn btn-outline-warning" data-demo="PUT_CLIENTE">PUT actualizar por id</button>
+                  <button class="btn btn-outline-danger" data-demo="DELETE_CLIENTE">DELETE eliminar por id</button>
+                </div>
+              </div>
+              <!-- Cuentas -->
+              <div class="tab-pane fade" id="pills-cuentas" role="tabpanel">
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-success" data-demo="CUENTA_AHORROS">POST crear</button>
+                  <button class="btn btn-outline-success" data-demo="CUENTA_CORRIENTE">POST crear (corriente)</button>
+                  <button class="btn btn-outline-success" data-demo="CUENTA_CON_SALDO">POST crear con saldo</button>
+                  <button class="btn btn-outline-danger" data-demo="CUENTA_SALDO_NEGATIVO">POST con saldo negativo (error)</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CUENTAS">GET listar</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CUENTAS_FILTRO">GET con filtros</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CUENTA_DETALLE">GET detalle por id</button>
+                  <button class="btn btn-outline-warning" data-demo="ACTUALIZAR_ESTADO_CUENTA">PUT actualizar estado (INACTIVA)</button>
+                  <button class="btn btn-outline-danger" data-demo="CANCELAR_CUENTA">PUT actualizar estado (CANCELADA)</button>
+                </div>
+              </div>
+              <!-- Transacciones -->
+              <div class="tab-pane fade" id="pills-trans" role="tabpanel">
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-success" data-demo="CONSIGNACION">POST consignación</button>
+                  <button class="btn btn-outline-success" data-demo="RETIRO">POST retiro</button>
+                  <button class="btn btn-outline-success" data-demo="TRANSFERENCIA">POST transferencia</button>
+                  <button class="btn btn-outline-danger" data-demo="TRANSACCION_MONTO_INVALIDO">POST monto inválido</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_TRANSACCIONES">GET listar</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_TRANSACCIONES_FILTRO">GET con filtros (cuenta/fechas)</button>
+                </div>
+              </div>
+              <!-- Consultas -->
+              <div class="tab-pane fade" id="pills-consultas" role="tabpanel">
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-secondary" data-demo="GET_CLIENTES">Clientes · GET listar</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CLIENTES_FILTRO">Clientes · GET con filtros</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CUENTAS">Cuentas · GET listar</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_CUENTAS_FILTRO">Cuentas · GET con filtros</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_TRANSACCIONES">Transacciones · GET listar</button>
+                  <button class="btn btn-outline-secondary" data-demo="GET_TRANSACCIONES_FILTRO">Transacciones · GET con filtros</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ayuda rápida / referencia -->
+        <div class="card shadow-sm">
+          <div class="card-header">Ayuda rápida</div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="fw-semibold mb-1">Métodos</div>
+                <ul class="small mb-0">
+                  <li>Clientes: POST, GET (lista/filtros), GET id, PUT id, DELETE id</li>
+                  <li>Cuentas: POST, POST con saldo, GET (lista/filtros), GET id, PUT estado</li>
+                  <li>Transacciones: POST (3), GET (lista/filtros)</li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <div class="fw-semibold mb-1">Tips</div>
+                <ul class="small mb-0">
+                  <li>Fechas ISO: 2025-01-01T00:00:00Z</li>
+                  <li>Usa header X-User para auditoría</li>
+                  <li>Revisa placeholders antes de enviar</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col derecha: Respuesta -->
+      <div class="col-lg-6">
+        <div class="card shadow-sm sticky-top-md">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Respuesta</span>
+            <div class="d-flex gap-2">
+              <button id="copyHeadersBtn" class="btn btn-sm btn-outline-secondary">Copiar headers</button>
+              <button id="copyBodyBtn" class="btn btn-sm btn-outline-secondary">Copiar body</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="meta" class="mb-2 small"></div>
+            <div class="mb-2">
+              <strong>Headers:</strong>
+              <pre id="headers" class="code bg-body-tertiary p-2 rounded small"></pre>
+            </div>
+            <div>
+              <strong>Body:</strong>
+              <pre id="resp" class="code bg-body-tertiary p-2 rounded" style="min-height: 200px;"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function setDemo(kind) {
+      const method = $("method");
+      const path = $("path");
+      const body = $("body");
+
+      switch (kind) {
+        // CLIENTES
+        case 'CLIENTE_VALIDO':
+          method.value = 'POST';
+          path.value = '/api/clientes';
+          body.value = JSON.stringify({
+            "nombres": "Juan Carlos",
+            "apellidos": "García López",
+            "tipoIdentificacion": "CC",
+            "numIdentificacion": "12345678",
+            "fechaNacimiento": "1990-05-15",
+            "email": "juan.garcia@email.com"
+          }, null, 2);
+          break;
+        case 'CLIENTE_MENOR_EDAD':
+          method.value = 'POST';
+          path.value = '/api/clientes';
+          body.value = JSON.stringify({
+            "nombres": "Ana María",
+            "apellidos": "Rodríguez",
+            "tipoIdentificacion": "CC",
+            "numIdentificacion": "87654321",
+            "fechaNacimiento": "2010-03-20",
+            "email": "ana.rodriguez@email.com"
+          }, null, 2);
+          break;
+        case 'CLIENTE_EMAIL_INVALIDO':
+          method.value = 'POST';
+          path.value = '/api/clientes';
+          body.value = JSON.stringify({
+            "nombres": "Carlos",
+            "apellidos": "Martínez",
+            "tipoIdentificacion": "CE",
+            "numIdentificacion": "11223344",
+            "fechaNacimiento": "1985-12-10",
+            "email": "email-invalido"
+          }, null, 2);
+          break;
+        case 'CLIENTE_NOMBRES_CORTOS':
+          method.value = 'POST';
+          path.value = '/api/clientes';
+          body.value = JSON.stringify({
+            "nombres": "A",
+            "apellidos": "B",
+            "tipoIdentificacion": "TI",
+            "numIdentificacion": "99887766",
+            "fechaNacimiento": "1995-08-25",
+            "email": "test@email.com"
+          }, null, 2);
+          break;
+        case 'CLIENTE_IDENTIFICACION_DUPLICADA':
+          method.value = 'POST';
+          path.value = '/api/clientes';
+          body.value = JSON.stringify({
+            "nombres": "María José",
+            "apellidos": "Pérez",
+            "tipoIdentificacion": "CC",
+            "numIdentificacion": "12345678",
+            "fechaNacimiento": "1988-11-30",
+            "email": "maria.perez@email.com"
+          }, null, 2);
+          break;
+        case 'GET_CLIENTES':
+          method.value = 'GET';
+          path.value = '/api/clientes';
+          body.value = '';
+          break;
+        case 'GET_CLIENTES_FILTRO':
+          method.value = 'GET';
+          path.value = '/api/clientes?nombre=Juan&apellido=Garc%C3%ADa';
+          body.value = '';
+          break;
+        case 'GET_CLIENTE_DETALLE':
+          method.value = 'GET';
+          path.value = '/api/clientes/REEMPLAZA_CON_UUID_CLIENTE';
+          body.value = '';
+          break;
+        case 'PUT_CLIENTE':
+          method.value = 'PUT';
+          path.value = '/api/clientes/REEMPLAZA_CON_UUID_CLIENTE';
+          body.value = JSON.stringify({
+            "nombres": "Juan Carlos",
+            "apellidos": "García López",
+            "tipoIdentificacion": "CC",
+            "numIdentificacion": "12345678",
+            "fechaNacimiento": "1990-05-15",
+            "email": "nuevo.correo@email.com"
+          }, null, 2);
+          break;
+        case 'DELETE_CLIENTE':
+          method.value = 'DELETE';
+          path.value = '/api/clientes/REEMPLAZA_CON_UUID_CLIENTE';
+          body.value = '';
+          break;
+
+        // CUENTAS
+        case 'CUENTA_AHORROS':
+          method.value = 'POST';
+          path.value = '/api/cuentas';
+          body.value = JSON.stringify({
+            "clienteId": "REEMPLAZA_CON_UUID_CLIENTE",
+            "tipoCuenta": "AHORROS",
+            "exentaGmf": false
+          }, null, 2);
+          break;
+        case 'CUENTA_CORRIENTE':
+          method.value = 'POST';
+          path.value = '/api/cuentas';
+          body.value = JSON.stringify({
+            "clienteId": "REEMPLAZA_CON_UUID_CLIENTE",
+            "tipoCuenta": "CORRIENTE",
+            "exentaGmf": true
+          }, null, 2);
+          break;
+        case 'CUENTA_CON_SALDO':
+          method.value = 'POST';
+          path.value = '/api/cuentas/con-saldo';
+          body.value = JSON.stringify({
+            "clienteId": "REEMPLAZA_CON_UUID_CLIENTE",
+            "tipoCuenta": "AHORROS",
+            "saldoInicial": 1000000.00,
+            "exentaGmf": false
+          }, null, 2);
+          break;
+        case 'CUENTA_SALDO_NEGATIVO':
+          method.value = 'POST';
+          path.value = '/api/cuentas/con-saldo';
+          body.value = JSON.stringify({
+            "clienteId": "REEMPLAZA_CON_UUID_CLIENTE",
+            "tipoCuenta": "AHORROS",
+            "saldoInicial": -50000.00,
+            "exentaGmf": false
+          }, null, 2);
+          break;
+        case 'GET_CUENTAS':
+          method.value = 'GET';
+          path.value = '/api/cuentas';
+          body.value = '';
+          break;
+        case 'GET_CUENTAS_FILTRO':
+          method.value = 'GET';
+          path.value = '/api/cuentas?clienteId=REEMPLAZA_CON_UUID_CLIENTE&tipoCuenta=AHORROS&estado=ACTIVA';
+          body.value = '';
+          break;
+        case 'GET_CUENTA_DETALLE':
+          method.value = 'GET';
+          path.value = '/api/cuentas/REEMPLAZA_CON_UUID_CUENTA';
+          body.value = '';
+          break;
+        case 'ACTUALIZAR_ESTADO_CUENTA':
+          method.value = 'PUT';
+          path.value = '/api/cuentas/REEMPLAZA_CON_UUID_CUENTA';
+          body.value = JSON.stringify({ "estado": "INACTIVA" }, null, 2);
+          break;
+        case 'CANCELAR_CUENTA':
+          method.value = 'PUT';
+          path.value = '/api/cuentas/REEMPLAZA_CON_UUID_CUENTA';
+          body.value = JSON.stringify({ "estado": "CANCELADA" }, null, 2);
+          break;
+
+        // TRANSACCIONES
+        case 'CONSIGNACION':
+          method.value = 'POST';
+          path.value = '/api/transacciones/consignacion';
+          body.value = JSON.stringify({
+            "cuentaDestinoId": "REEMPLAZA_CON_UUID_CUENTA",
+            "monto": 500000.00,
+            "descripcion": "Consignación inicial"
+          }, null, 2);
+          break;
+        case 'RETIRO':
+          method.value = 'POST';
+          path.value = '/api/transacciones/retiro';
+          body.value = JSON.stringify({
+            "cuentaOrigenId": "REEMPLAZA_CON_UUID_CUENTA",
+            "monto": 100000.00,
+            "descripcion": "Retiro de efectivo"
+          }, null, 2);
+          break;
+        case 'TRANSFERENCIA':
+          method.value = 'POST';
+          path.value = '/api/transacciones/transferencia';
+          body.value = JSON.stringify({
+            "cuentaOrigenId": "REEMPLAZA_CON_UUID_CUENTA_ORIGEN",
+            "cuentaDestinoId": "REEMPLAZA_CON_UUID_CUENTA_DESTINO",
+            "monto": 250000.00,
+            "descripcion": "Transferencia entre cuentas"
+          }, null, 2);
+          break;
+        case 'TRANSACCION_MONTO_INVALIDO':
+          method.value = 'POST';
+          path.value = '/api/transacciones/consignacion';
+          body.value = JSON.stringify({
+            "cuentaDestinoId": "REEMPLAZA_CON_UUID_CUENTA",
+            "monto": -100000.00,
+            "descripcion": "Monto negativo inválido"
+          }, null, 2);
+          break;
+        case 'GET_TRANSACCIONES':
+          method.value = 'GET';
+          path.value = '/api/transacciones';
+          body.value = '';
+          break;
+        case 'GET_TRANSACCIONES_FILTRO':
+          method.value = 'GET';
+          path.value = '/api/transacciones?cuenta=REEMPLAZA_CON_UUID_CUENTA&fechaDesde=2025-01-01T00:00:00Z&fechaHasta=2025-12-31T23:59:59Z';
+          body.value = '';
+          break;
+      }
+      updateBodyVisibility();
+    }
+
+    async function send() {
+      const baseUrl = $("baseUrl").value.replace(/\/$/, '');
+      const method = $("method").value;
+      const path = $("path").value.startsWith('/') ? $("path").value : '/' + $("path").value;
+      const url = baseUrl + path;
+      const rawBody = $("body").value.trim();
+      const xUser = $("xUser").value.trim();
+
+      const opts = { method, headers: {} };
+      if (rawBody.length && (method === 'POST' || method === 'PUT')) {
+        opts.headers['Content-Type'] = 'application/json';
+        opts.body = rawBody;
+      }
+      if (xUser.length) opts.headers['X-User'] = xUser;
+
+      const t0 = performance.now();
+      let resp, text;
+      try {
+        resp = await fetch(url, opts);
+        text = await resp.text();
+      } catch (e) {
+        $("meta").innerHTML = `<span class="badge text-bg-danger">Error de red</span> ${e.message}`;
+        $("headers").textContent = '';
+        $("resp").textContent = '';
+        return;
+      }
+      const t1 = performance.now();
+
+      const statusBadge = resp.ok ? 'text-bg-success' : 'text-bg-danger';
+      $("meta").innerHTML = `
+        <span class="badge ${statusBadge}">HTTP ${resp.status}</span>
+        <span class="ms-2">${resp.statusText}</span>
+        <span class="ms-3 small text-muted">${(t1 - t0).toFixed(1)} ms</span>
+        <div class="small text-muted">${url}</div>
+      `;
+
+      const headersObj = {};
+      resp.headers.forEach((v,k)=> headersObj[k] = v);
+      $("headers").textContent = JSON.stringify(headersObj, null, 2);
+
+      try { $("resp").textContent = JSON.stringify(JSON.parse(text), null, 2); }
+      catch { $("resp").textContent = text; }
+
+      try {
+        localStorage.setItem('apiTester:last', JSON.stringify({
+          baseUrl, method, path: $("path").value, body: $("body").value, xUser: $("xUser").value
+        }));
+      } catch {}
+    }
+
+    function pretty() {
+      const raw = $("body").value.trim();
+      if (!raw) return;
+      try { $("body").value = JSON.stringify(JSON.parse(raw), null, 2); } catch {}
+    }
+
+    function restoreLast() {
+      try {
+        const last = JSON.parse(localStorage.getItem('apiTester:last') || 'null');
+        if (!last) return;
+        $("baseUrl").value = last.baseUrl || $("baseUrl").value;
+        $("method").value = last.method || 'GET';
+        $("path").value = last.path || '/api/clientes';
+        $("body").value = last.body || '';
+        $("xUser").value = last.xUser || '';
+      } catch {}
+      updateBodyVisibility();
+    }
+
+    function updateBodyVisibility() {
+      const m = $("method").value;
+      const show = (m === 'POST' || m === 'PUT');
+      $("bodySection").style.display = show ? '' : 'none';
+    }
+
+    function buildCurl() {
+      const baseUrl = $("baseUrl").value.replace(/\/$/, '');
+      const method = $("method").value;
+      const path = $("path").value.startsWith('/') ? $("path").value : '/' + $("path").value;
+      const url = baseUrl + path;
+      const xUser = $("xUser").value.trim();
+      const rawBody = $("body").value.trim();
+
+      const parts = ["curl", "-X", method, "\"" + url + "\""];
+      if (xUser) parts.push("-H", "\"X-User: " + xUser + "\"");
+      if ((method === 'POST' || method === 'PUT') && rawBody) {
+        parts.push("-H", "\"Content-Type: application/json\"");
+        parts.push("--data", "\"" + rawBody.replace(/\\n/g, '').replace(/\"/g, '\\\"') + "\"");
+      }
+      return parts.join(' ');
+    }
+
+    function copy(text) {
+      try { navigator.clipboard.writeText(text); } catch {}
+    }
+
+    // Eventos
+    document.getElementById('sendBtn').addEventListener('click', send);
+    document.getElementById('prettyBtn').addEventListener('click', pretty);
+    document.getElementById('clearBtn').addEventListener('click', ()=> { $("resp").textContent=''; $("headers").textContent=''; $("meta").textContent=''; });
+    document.getElementById('curlBtn').addEventListener('click', ()=> copy(buildCurl()));
+    document.getElementById('copyHeadersBtn').addEventListener('click', ()=> copy($("headers").textContent));
+    document.getElementById('copyBodyBtn').addEventListener('click', ()=> copy($("resp").textContent));
+    document.getElementById('method').addEventListener('change', updateBodyVisibility);
+    document.querySelectorAll('[data-demo]').forEach(btn => btn.addEventListener('click', ()=> setDemo(btn.dataset.demo)));
+
+    restoreLast();
+  </script>
+</body>
+</html>
+

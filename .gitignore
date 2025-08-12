@@ -1,0 +1,18 @@
+# Java, Maven, IDEs, OS files
+/target/
+/.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+!.mvn/wrapper/MavenWrapperDownloader.java
+.idea/
+.project
+.classpath
+.settings/
+*.iml
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+application-local.properties
+

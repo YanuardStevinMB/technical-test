@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: banca-postgres
+    environment:
+      POSTGRES_DB: banca
+      POSTGRES_USER: banca
+      POSTGRES_PASSWORD: banca
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banca -d banca"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: banca-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: banca
+      DB_USER: banca
+      DB_PASSWORD: banca
+      JAVA_OPTS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  adminer:
+    image: adminer:latest
+    container_name: banca-adminer
+    depends_on:
+      - postgres
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DESIGN: pepa-linha
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+
+
+
